@@ -1,4 +1,9 @@
-*.zip
-*.jpg
-sketch.txt
+**/__pycache__
+**/*.zip
+**/*.jpg
 **/teste.py
+datasets/ODIR/data
+datasets/ODIR/codigo/train
+datasets/ODIR/codigo/test
+datasets/ODIR/codigo/classes
+preprocess/preprocessed_data

@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_path = Path('data')
+data_path = Path('../datasets/ODIR/data')
 out_data_path = Path('preprocessed_data')
 
 average_imgs_size = (0, 0)

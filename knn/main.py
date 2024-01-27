@@ -5,7 +5,7 @@ import numpy as np
 
 from pathlib import Path
 from sklearn.neighbors import KNeighborsClassifier
-from train_test_split import train_test_split
+from datasets.ODIR.codigo.train_test_split import train_test_split
 
 data_path = Path('data')
 X = []

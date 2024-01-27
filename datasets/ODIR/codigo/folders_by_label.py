@@ -5,13 +5,18 @@ import pandas as pd
 
 from pathlib import Path
 
-data_path = Path('data')
+data_path = Path.cwd().parent.parent.parent / 'preprocess' / 'preprocessed_data'
 out_data_path = Path('classes')
 labels_csv_path = Path('labels.csv')
 
 accepted_labels = ['N', 'D' ,'G' ,'C' ,'A' ,'H' ,'M' ,'O']
 
 data = os.listdir(data_path)
+
+if os.path.exists(out_data_path):
+    shutil.rmtree(out_data_path)
+
+os.mkdir(out_data_path)
 
 for label in accepted_labels:
     out_data_file = out_data_path / label
