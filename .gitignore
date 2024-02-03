@@ -3,7 +3,9 @@
 **/*.jpg
 **/teste.py
 datasets/ODIR/data
+datasets/ODIR/train
+datasets/ODIR/test
 datasets/ODIR/codigo/train
 datasets/ODIR/codigo/test
-datasets/ODIR/codigo/classes
-preprocess/preprocessed_data
+datasets/ODIR/codigo/*classes
+preprocess/*data
