@@ -2,6 +2,7 @@
 **/*.zip
 **/*.jpg
 **/teste.py
+**/results.txt
 datasets/ODIR/data
 datasets/ODIR/train
 datasets/ODIR/test
