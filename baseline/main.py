@@ -12,7 +12,7 @@ from random import sample, choice
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
 
-odir_data_path = Path('../datasets/ODIR/codigo/128_baseline_classes')
+odir_data_path = Path('../datasets/ODIR/codigo/64_baseline_classes')
 X = []
 y = []
 
@@ -33,6 +33,9 @@ for folder_name in ['D', 'N']:
         # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
         # img = clahe.apply(img)
 
+        img = np.float32(img)
+        img = cv2.normalize(img, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+        
         img = img.flatten()
 
         X.append(img)
@@ -50,7 +53,7 @@ classifiers = {'k-NN': KNeighborsClassifier(), 'SVM': SVC()}
 
 results_metrics = {'acc': [], 'prec': [], 'rec': [], 'f1': [], 'conf_matrix': []}
 results = {classifier: deepcopy(results_metrics) for classifier in classifiers.values()}
-iterations = 1
+iterations = 10
 for i in range(iterations):
     print('Iteração:', i)
 
