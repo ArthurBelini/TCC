@@ -11,6 +11,21 @@ from sklearn.svm import SVC
 from random import sample, choice
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
+from odir_train_test_split import odir_train_test_split
+
+def pre_process(img):
+    # img = cv2.resize(img, (64, 64))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # img = cv2.equalizeHist(img)
+    # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    # img = clahe.apply(img)
+
+    img = np.float32(img)
+    img = cv2.normalize(img, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+    
+    img = img.flatten()
+
+    return img
 
 odir_data_path = Path('../datasets/ODIR/codigo/64_baseline_classes')
 X = []
@@ -25,20 +40,12 @@ for folder_name in ['D', 'N']:
     for img_name in imgs_names[:min(max_imgs_per_label, len(imgs_names))]:
         print(img_name)
 
-        img = cv2.imread(str(imgs_path / img_name))
+        # img = cv2.imread(str(imgs_path / img_name))
 
-        # img = cv2.resize(img, (64, 64))
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # img = cv2.equalizeHist(img)
-        # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-        # img = clahe.apply(img)
+        # img = pre_process(img)
 
-        img = np.float32(img)
-        img = cv2.normalize(img, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
-        
-        img = img.flatten()
-
-        X.append(img)
+        X.append(img_name)
+        # X.append(img)
         y.append(folder_name)
 
 
@@ -57,11 +64,12 @@ iterations = 10
 for i in range(iterations):
     print('Iteração:', i)
 
-    # X_train, X_test, y_train, y_test = odir_train_test_split(X, y, 0.2, odir_data_path)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    # X_train  = [cv2.normalize(img, None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F).flatten() for img in X_train]
-    # X_test = [cv2.normalize(img, None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F).flatten() for img in X_test]
+    X_train, X_test, y_train, y_test = odir_train_test_split(X, y, 0.2, odir_data_path)
+
+    X_train = [pre_process(img) for img in X_train]
+    X_test = [pre_process(img) for img in X_test]
 
     for classifier_name in classifiers:
         classifier = classifiers[classifier_name]
