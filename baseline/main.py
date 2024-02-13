@@ -22,7 +22,8 @@ def pre_process(img):
 
     img = np.float32(img)
     img = cv2.normalize(img, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
-    
+    # img /= 255.0
+
     img = img.flatten()
 
     return img
@@ -60,7 +61,7 @@ classifiers = {'k-NN': KNeighborsClassifier(), 'SVM': SVC()}
 
 results_metrics = {'acc': [], 'prec': [], 'rec': [], 'f1': [], 'conf_matrix': []}
 results = {classifier: deepcopy(results_metrics) for classifier in classifiers.values()}
-iterations = 10
+iterations = 1
 for i in range(iterations):
     print('Iteração:', i)
 

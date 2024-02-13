@@ -10,22 +10,53 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
-from random import sample
+from random import sample, choice
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score
-
+from sklearn.model_selection import train_test_split
 from odir_train_test_split import odir_train_test_split
 
-odir_data_path = Path('../datasets/ODIR/codigo/256_preprocessed_classes')
+def pre_process(img):
+    # img = cv2.resize(img, (64, 64))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # img = cv2.equalizeHist(img)
+    # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    # img = clahe.apply(img)
+
+    img = np.float32(img)
+    img = cv2.normalize(img, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+    # img /= 255.0
+
+    img = img.flatten()
+
+    return img
+
+odir_data_path = Path('../datasets/ODIR/codigo/64_baseline_classes')
 X = []
 y = []
 
-max_imgs_per_label = 3000
-for folder_name in os.listdir(odir_data_path):
+max_imgs_per_label = 1608
+for folder_name in ['D', 'N']:
+    imgs_path = odir_data_path / folder_name
     imgs_names = os.listdir(odir_data_path / folder_name)
 
-    for img_name in sample(imgs_names, min(max_imgs_per_label, len(imgs_names))):
+    # for img_name in sample(imgs_names, min(max_imgs_per_label, len(imgs_names))):
+    for img_name in imgs_names[:min(max_imgs_per_label, len(imgs_names))]:
+        print(img_name)
+
+        # img = cv2.imread(str(imgs_path / img_name))
+
+        # img = pre_process(img)
+
         X.append(img_name)
+        # X.append(img)
         y.append(folder_name)
+
+
+# cv2.imwrite('equalizeHist.jpg', X[30])
+
+# cv2.imshow('Exemplo', choice(X))
+# cv2.imshow('Exemplo', X[0])
+# cv2.waitKey()
 
 classifiers = {'k-NN': KNeighborsClassifier(), 'SVM': SVC(), 'Random Forest': RandomForestClassifier(), 'Naive Bayes': GaussianNB()}
 # classifiers = {'knn': KNeighborsClassifier()}
@@ -36,10 +67,12 @@ iterations = 1
 for i in range(iterations):
     print('Iteração:', i)
 
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
     X_train, X_test, y_train, y_test = odir_train_test_split(X, y, 0.2, odir_data_path)
 
-    X_train  = [cv2.normalize(img, None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F).flatten() for img in X_train]
-    X_test = [cv2.normalize(img, None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F).flatten() for img in X_test]
+    X_train = [pre_process(img) for img in X_train]
+    X_test = [pre_process(img) for img in X_test]
 
     for classifier_name in classifiers:
         classifier = classifiers[classifier_name]
@@ -67,12 +100,14 @@ for classifier_name in classifiers:
     print()
     print(f'{classifier_name}:')
     print('Acurácia:', np.mean(results[classifier]['acc']))
+    print('Acurácia Std:', np.std(results[classifier]['acc']))
     print('Precisão:', np.mean(results[classifier]['prec']))
     print('Revocação:', np.mean(results[classifier]['rec']))
     print('F1 score:', np.mean(results[classifier]['f1']))
 
-    conf_matrix = confusion_matrix(y_test, y_pred)
-    disp = ConfusionMatrixDisplay(sum(results[classifier]['conf_matrix']), display_labels=classifier.classes_)
+    disp = ConfusionMatrixDisplay(sum(results[classifier]['conf_matrix']) // iterations, display_labels=classifier.classes_)
     disp.plot()
+    plt.title(classifier_name)
+    plt.gcf().canvas.manager.set_window_title(classifier_name)
     
 plt.show()

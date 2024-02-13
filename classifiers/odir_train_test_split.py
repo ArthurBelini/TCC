@@ -2,6 +2,8 @@ import os
 import cv2
 import shutil
 
+import numpy as np
+
 from itertools import product
 from pathlib import Path
 from random import shuffle
@@ -108,7 +110,7 @@ def odir_train_test_split(X: list, y: list, test_size : float = 0.20, data_path 
 
             return
 
-    return X_train, X_test, y_train, y_test
+    return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
 
 if __name__ == '__main__':
     data_path = Path('classes')
