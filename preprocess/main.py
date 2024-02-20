@@ -11,7 +11,7 @@ import numpy as np
 
 data_path = Path('../datasets/ODIR/data')
 # out_data_path = Path('preprocessed_data')
-out_data_path = Path('64_crop_data')
+out_data_path = Path('256_data')
 
 average_imgs_size = (0, 0)
 
@@ -30,10 +30,10 @@ for i, img_name in enumerate(imgs_names):
     average_imgs_size = tuple(sum(dim_sizes) for dim_sizes in zip(average_imgs_size, img.shape[:2]))
 
     # img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_AREA)
-    # img = cv2.resize(img, (256, 256), interpolation=cv2.INTER_AREA)
+    img = cv2.resize(img, (256, 256), interpolation=cv2.INTER_AREA)
     # img = cv2.resize(img, (128, 128), interpolation=cv2.INTER_AREA)
     # img = cv2.resize(img, (64, 64), interpolation=cv2.INTER_AREA)
-    img = crop_resize(img, 64)
+    # img = crop_resize(img, 512)
     # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # img = cv2.equalizeHist(img)
 

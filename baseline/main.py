@@ -28,7 +28,7 @@ def pre_process(img):
 
     return img
 
-odir_data_path = Path('../datasets/ODIR/codigo/64_baseline_classes')
+odir_data_path = Path('../datasets/ODIR/codigo/64_classes')
 X = []
 y = []
 
@@ -65,9 +65,11 @@ iterations = 1
 for i in range(iterations):
     print('Iteração:', i)
 
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-    X_train, X_test, y_train, y_test = odir_train_test_split(X, y, 0.2, odir_data_path)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    print(len(X_train))
+    print(len(X_test))
+    input()
+    # X_train, X_test, y_train, y_test = odir_train_test_split(X, y, 0.2, odir_data_path)
 
     X_train = [pre_process(img) for img in X_train]
     X_test = [pre_process(img) for img in X_test]

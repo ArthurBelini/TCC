@@ -1,8 +1,9 @@
 **/__pycache__
 **/*.zip
 **/*.jpg
+**/*.tex
 **/teste.py
-**/results.txt
+**/*.txt
 datasets/ODIR/data
 datasets/ODIR/train
 datasets/ODIR/test

@@ -6,11 +6,11 @@ import pandas as pd
 from pathlib import Path
 
 # data_path = Path.cwd().parent.parent.parent / 'preprocess' / '256_preprocessed_data'
-data_path = Path.cwd().parent.parent.parent / 'preprocess' / '64_crop_data'
+data_path = Path.cwd().parent.parent.parent / 'preprocess' / '256_data'
 # data_path = Path('../data')
 # out_data_path = Path('preprocessed_classes')
 # out_data_path = Path('classes')
-out_data_path = Path('64_crop_classes')
+out_data_path = Path('256_classes')
 labels_csv_path = Path('labels.csv')
 
 accepted_labels = ['N', 'D' ,'G' ,'C' ,'A' ,'H' ,'M' ,'O']
